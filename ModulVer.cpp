@@ -46,9 +46,9 @@ BOOL CModuleVersion::GetFileVersionInfo(LPCTSTR modulename)
 		// Load file temporarily
 		hTempHandle = ::LoadLibrary(modulename);
 
-		if (hTempHandle == NULL)
-			return FALSE;
-		else
+		if (hTempHandle != NULL)
+			//return FALSE;
+		//else
 			hModule = hTempHandle;
 	}
 
@@ -96,7 +96,7 @@ BOOL CModuleVersion::GetFileVersionInfo(LPCTSTR modulename)
 	*(VS_FIXEDFILEINFO*)this = *(VS_FIXEDFILEINFO*)lpvi;
 
 	// Get translation info
-	if (VerQueryValue(m_pVersionInfo,	"\\VarFileInfo\\Translation", &lpvi, &iLen) && iLen >= 4) 
+	if (VerQueryValue(m_pVersionInfo,	_T("\\VarFileInfo\\Translation"), &lpvi, &iLen) && iLen >= 4) 
 	{
 		m_translation = *(TRANSLATION*)lpvi;
 //		TRACE("code page = %d\n", m_translation.charset);
@@ -156,7 +156,7 @@ BOOL CModuleVersion::DllGetVersion(LPCTSTR modulename, DLLVERSIONINFO& dvi)
 	// DllGetVersion. Depending upon the DLL, the lack of implementation of the 
 	// function may be a version marker in itself.
 	//
-	DLLGETVERSIONPROC pDllGetVersion = (DLLGETVERSIONPROC)GetProcAddress(hinst, _T("DllGetVersion"));
+	DLLGETVERSIONPROC pDllGetVersion = (DLLGETVERSIONPROC)GetProcAddress(hinst, "DllGetVersion");
 
 	if (!pDllGetVersion)
 		return FALSE;
